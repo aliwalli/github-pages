@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>McDonald's App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #fff; /* McDonald's Red (Approximate) */
+    }
+
+    .app-container {
+      max-width: 400px;
+      margin: 20px auto; /* Add margin */
+      border-radius: 15px; /* Rounded corners for app container */
+      overflow: hidden; /* Ensure content stays within rounded corners */
+      background-color: #e60023; /* Match body background */
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center; /* Vertically align items */
+      background-color: #d32f2f;
+      padding: 10px;
+      padding-left: 20px; /* More padding on left */
+      padding-right: 20px; /* More padding on right */
+      position: relative;
+    }
+
+    .menu-button {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 24px;
+      order: 1; /* Ensure it's on the left */
+    }
+
+    .logo {
+      height: 40px;
+      position: absolute; /* Absolute positioning */
+      left: 50%; /* Center horizontally */
+      transform: translateX(-50%); /* Adjust for the logo's width */
+      order: 2; /* Ensure it's in the center */
+    }
+
+    .header-right { 
+      margin-left: auto; /* Push to the right (not strictly needed with space-between) */
+      order: 3; /* Ensure it's on the right */
+    }
+
+    .order-button {
+      background-color: #fff;
+      color: #d32f2f;
+      border: none;
+      padding: 10px 15px; /* Adjusted padding */
+      border-radius: 5px;
+      margin-right: -10px; /* Pull closer to edge */
+    }
+
+    .points-section {
+      text-align: center;
+      padding: 20px;
+    }
+
+    .points-container {
+      background-color: white;
+      border-radius: 20px;
+      padding: 15px;
+      display: inline-block;
+      width: 90%; /* Wider card */
+      max-width: 350px; /* Ensure it doesn't get too wide */
+      text-align: left; /* Align text within the card to the left */
+      position: relative; /* For QR code positioning */
+      box-sizing: border-box; /* Added this to points container to fix content overflow*/
+    }
+
+    .points-container h2 {
+      font-size: 1.5em; /* Larger heading */
+      font-weight: bold; /* Bolder heading */
+      margin-bottom: 10px; /* Add some spacing */
+    }
+
+    .points-bar {
+      width: 100%; /* Wider progress bar */
+      height: 10px;
+      background-color: #ddd;
+      margin: 10px auto; /* Add some spacing */
+      position: relative;
+      border-radius: 5px;
+    }
+
+    .progress {
+      width: 50%;
+      height: 100%;
+      background-color: #ffd700;
+      border-radius: 5px;
+    }
+
+    .points-container p {
+      font-size: 0.9em; /* Smaller text */
+      color: #333; /* Darker text */
+    }
+
+    .order-options {
+      text-align: center;
+      padding: 20px;
+    }
+
+    .order-options h3 {
+      color: white;
+      margin-bottom: 15px; /* Add more spacing below heading */
+    }
+
+    .options {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .option img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 3px solid white;
+    }
+
+    .promotion-section {
+      padding: 20px;
+    }
+
+    .promotion-section h3 {
+      color: white;
+      margin-bottom: 15px; /* Spacing below heading */
+    }
+
+    .promotion-card {
+      text-align: center;
+      position: relative;
+      border-radius: 10px; /* Rounded corners */
+      overflow: hidden; /* Ensure content stays within rounded corners */
+    }
+
+    .carousel-container {
+      position: relative;
+      width: 100%;
+      max-width: 100%; /* Take full width */
+      margin: auto;
+      overflow: hidden;
+    }
+
+    .carousel {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+
+    .carousel-item {
+      width: 100%;
+      object-fit: cover;
+      border-radius: 10px; /* Rounded corners for images */
+    }
+
+    button {
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      padding: 10px;
+      position: absolute;
+      top: 50%;
+      z-index: 1;
+      font-size: 18px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .prev {
+      left: 10px;
+      transform: translateY(-50%);
+    }
+
+    .next {
+      right: 10px;
+      transform: translateY(-50%);
+    }
+
+    .recommendations-section {
+      text-align: center;
+      padding: 20px;
+    }
+
+    .recommendations h3 {
+      color: white;
+      margin-bottom: 15px;
+    }
+
+    .recommendations {
+      display: flex;
+      overflow-x: auto;
+      padding: 10px;
+    }
+
+    .recommendations img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      margin: 0 5px;
+      border-radius: 10px;
+    }
+
+    .scroll-indicator {
+      display: flex;
+      justify-content: center;
+      margin-top: 10px;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      background-color: rgba(255, 255, 255, 0.5);
+      border-radius: 50%;
+      margin: 0 5px;
+      display: inline-block; /* Ensure dots are on the same line */
+    }
+
+    .dot.active {
+      background-color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="header">
+      <button class="menu-button">&#9776;</button>
+      <img src="logo mcdonalds.png" alt="McDonald's Logo" class="logo">
+      <div class="header-right">  
+        <button class="order-button">Ordena</button>
+      </div>
+    </header>
+
+    <!-- Puntos -->
+    <section class="points-section">
+      <div class="points-container">
+        <h2>Tus puntos</h2>
+        <div class="points-bar">
+          <div class="progress"></div>
+        </div>
+        <p>Te faltan <span>__</span> puntos para llegar a los <span>__</span></p>
+      </div>
+    </section>
+
+    <!-- Opciones de pedido -->
+    <section class="order-options">
+      <h3>¿Listx para ordenar?</h3>
+      <div class="options">
+        <div class="option"><img src="logo mcdonalds redondo.png" alt="McDonald's"></div>
+        <div class="option"><img src="logo rappi.webp" alt="Rappi"></div>
+        <div class="option"><img src="logo uber eats.jpg" alt="Uber Eats"></div>
+      </div>
+    </section>
+
+    <!-- Promoción -->
+    <section class="promotion-section">
+      <h3>Promociones de hoy</h3>
+      <div class="promotion-card">
+        <h4>McDonald's APPNIVERSARIO</h4>
+        <div class="carousel-container">
+          <div class="carousel">
+            <img src="Appniversario.jpg" alt="Combo Big Mac" class="carousel-item">
+            <img src="Pokemon.jpg" alt="Pokemon Combo" class="carousel-item">
+            <img src="mcflurry kitkat.jpg" alt="McFlurry KitKat" class="carousel-item">
+          </div>
+          <button class="prev">❮</button>
+          <button class="next">❯</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recommendations -->
+    <section class="recommendations-section">
+      <h3>Recomendaciones para ti</h3>
+      <div class="recommendations">
+        <!-- Add recommendation items here -->
+      </div>
+      <div class="scroll-indicator">
+        <span class="dot active"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // Simplificado para Wix
+    let currentIndex = 0;
+
+    function showSlide(index) {
+      const carousel = document.querySelector('.carousel');
+      const slides = document.querySelectorAll('.carousel-item');
+      const totalSlides = slides.length;
+
+      if (index >= totalSlides) {
+        currentIndex = 0;
+      } else if (index < 0) {
+        currentIndex = totalSlides - 1;
+      } else {
+        currentIndex = index;
+      }
+
+      const offset = -currentIndex * 100;
+      carousel.style.transform = `translateX(${offset}%)`;
+    }
+
+    // Eventos de botones (puede que no funcione en Wix)
+    document.querySelector('.next').addEventListener('click', () => {
+      showSlide(currentIndex + 1);
+    });
+
+    document.querySelector('.prev').addEventListener('click', () => {
+      showSlide(currentIndex - 1);
+    });
+  </script>
+</body>
+</html>
+
